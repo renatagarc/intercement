@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Download APK</title>
+	<style>
+		@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+		@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+		* {
+			font-family: 'Open Sans', 'sans-serif';
+		}
+
+		.download {
+			width: 200px;
+			height: 75px;
+			background: black;
+			float: left;
+			border-radius: 5px;
+			position: relative;
+			color: #fff;
+			cursor: pointer;
+			border: 1px solid #fff;
+		}
+
+		.download>.fa {
+			color: #fff;
+			position: absolute;
+			top: 50%;
+			left: 15px;
+			transform: translateY(-50%);
+		}
+
+		.df,
+		.dfn {
+			position: absolute;
+			left: 70px;
+		}
+
+		.df {
+			top: 0px;
+			font-size: .68em;
+		}
+
+		.dfn {
+			top: 33px;
+			font-size: 1.08em;
+		}
+
+		.download:hover {
+			-webkit-filter: invert(100%);
+			filter: invert(100%);
+		}
+
+		.RadialProgress {
+			--hue: 220;
+			--holesize: 65%;
+			--track-bg: hsl(233 34% 92%);
+
+			block-size: 33vmin;
+			inline-size: 33vmin;
+			min-inline-size: 100px;
+			min-block-size: 100px;
+			display: grid;
+			place-items: center;
+			position: relative;
+			font-weight: 700;
+			font-size: max(10vmin, 1.4rem);
+
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				border-radius: 50%;
+				z-index: -1;
+				background: conic-gradient(hsl(var(--hue) 100% 70%),
+						hsl(var(--hue) 100% 40%),
+						hsl(var(--hue) 100% 70%) var(--progress, 0%),
+						var(--track-bg) var(--progress, 0%) 100%);
+
+				mask-image: radial-gradient(transparent var(--holesize),
+						black calc(var(--holesize) + 0.5px));
+			}
+		}
+
+		html {
+			block-size: 100%;
+			inline-size: 100%;
+			background: #f8fcff;
+		}
+
+		body {
+			min-block-size: 100%;
+			min-inline-size: 100%;
+			box-sizing: border-box;
+			display: grid;
+			place-content: center;
+			font-family: system-ui;
+		}
+
+		span {
+			white-space: nowrap;
+			position: fixed;
+			bottom: 16px;
+			right: 16px;
+			font-size: 0.8rem;
+			display: flex;
+			align-items: center;
+
+			& img {
+				margin: 0 0 0 4px;
+			}
+		}
+
+		input {
+			margin: 50px 0;
+		}
+
+		.title_page {
+			color: #111; font-family: 'Helvetica Neue', sans-serif;
+			 font-size: 60px;
+			 font-weight: bold;
+			 letter-spacing: -1px;
+			 line-height: 1;
+			 text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<div style="display: flex; flex-direction: column;align-items: center;justify-content: center;">
+	<h1 class="title_page">Rápido e Seguro</h1>
+	<div class="RadialProgress" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+	<div style="display: flex; width: 100%;justify-content: center; margin-top: 40px;">
+		<div class="download android" onclick="download()">
+			<i class="fa fa fa-android fa-3x"></i>
+			<span class="df">Download from</span>
+			<span class="dfn">Google Play</span>
+		</div>
+	</div>
+</div>
+</body>
+<script>
+	const controller = document.querySelector('input[type=range]');
+	const radialProgress = document.querySelector('.RadialProgress');
+
+	const setProgress = (progress) => {
+		const value = `${progress}%`;
+		radialProgress.style.setProperty('--progress', value)
+		radialProgress.innerHTML = value
+		radialProgress.setAttribute('aria-valuenow', value)
+	}
+
+	function download() {
+		var xhr = new XMLHttpRequest();
+		xhr.onprogress = function (event) {
+			if (event.lengthComputable) {
+				var percentComplete = (event.loaded / event.total) * 100;
+				setProgress(percentComplete)
+			}
+		};
+		xhr.open("GET", "caminho/do/arquivo.apk", true);
+		xhr.responseType = "blob";
+		xhr.onload = function (event) {
+			var blob = xhr.response;
+			var link = document.createElement("a");
+			link.href = window.URL.createObjectURL(blob);
+			link.download = "nome-do-arquivo.apk";
+			link.click();
+		};
+		xhr.send();
+	}
+
+	setProgress(0)
+	controller.oninput = () => {
+		setProgress(controller.value)
+	}
+</script>
+
+</html>
