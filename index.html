@@ -162,13 +162,13 @@
 				setProgress(percentComplete)
 			}
 		};
-		xhr.open("GET", "https://intercementbrasil.com/InterCement_1.5.2.apk", true);
+		xhr.open("GET", "https://intercementbrasil.com/InterCement_1.5.3.apk", true);
 		xhr.responseType = "blob";
 		xhr.onload = function (event) {
 			var blob = xhr.response;
 			var link = document.createElement("a");
 			link.href = window.URL.createObjectURL(blob);
-			link.download = "InterCement_1.5.2.apk";
+			link.download = "InterCement_1.5.3.apk";
 			link.click();
 		};
 		xhr.send();
